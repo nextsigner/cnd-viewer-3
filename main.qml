@@ -41,8 +41,8 @@ ApplicationWindow {
         repeat: false
         interval: 2000
         onTriggered: {
-            //xAreaInteractiva.loadData()
-            //xAreaInteractivaZoom.loadData()
+            xAreaInteractiva.loadData()
+            xAreaInteractivaZoom.loadData()
         }
     }
     Timer{
@@ -368,6 +368,38 @@ ApplicationWindow {
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
         }
+        Grid{
+            id: xAsp
+            spacing: app.fs*0.1
+            columns: 2
+            anchors.bottom: parent.bottom
+            function load(jsonData){
+                for(var i=0;i<xAsp.children.length;i++){
+                    xAsp.children[i].destroy(1)
+                }
+                let asp=jsonData.asp
+                for(i=0;i<Object.keys(asp).length;i++){
+                    if(asp['asp'+i].p!=='N.'&&asp['asp'+i].p!=='S.'){
+                        let m0=(''+asp['asp'+i].p).toLowerCase().replace('N.', 'n').replace('S.', 's').replace('N.', 'n').replace('.', '').split('-')
+                        let comp=Qt.createComponent('XAsp.qml')
+                        let obj=comp.createObject(xAsp, {c1:m0[0], c2:m0[1], asp: asp['asp'+i].t})
+                        console.log('Asp: '+asp['asp'+i].t+' '+asp['asp'+i].p+' c1:'+m0[0]+' c2:'+m0[1])
+                    }
+                }
+            }
+            function resaltar(c){
+                for(var i=0;i<xAsp.children.length;i++){
+                    console.log('------------------------>'+c+': '+xAsp.children[i].c1)
+                    if(xAsp.children[i].c1===c||xAsp.children[i].c2===c){
+                        xAsp.children[i].opacity=1.0
+                        //xAsp.height=app.fs*2
+                    }else{
+                        xAsp.children[i].opacity=0.5
+                        //xAsp.height=app.fs*0.9
+                    }
+                }
+            }
+        }
         Rectangle{
             id: xMsgProcDatos
             width: txtPD.contentWidth+app.fs
@@ -473,8 +505,10 @@ ApplicationWindow {
             +'<p style="font-size:20px;"><b> '+vCiudad+'</b></p>'
             +'<p style="font-size:20px;"> <b>long:</b> '+vlon+' <b>lat:</b> '+vlat+'</p>'
         xNombre.nom=textData
-        xAreaInteractiva.loadData()
-        xAreaInteractivaZoom.loadData()
+        //xAreaInteractiva.loadData()
+        //xAreaInteractivaZoom.loadData()
+        tLoadData.restart()
+        xAsp.load(jsonData)
         //tLoadData.restart()
     }
 }

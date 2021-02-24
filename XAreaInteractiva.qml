@@ -102,6 +102,7 @@ Rectangle {
                             if(!app.lock){
                                 app.setInfo(compSen.info1, compSen.info2, compSen.info3, compSen.son)
                             }
+                            xAsp.resaltar(compSen.son.split('_')[0])
                             xMiraSen.visible=!xMiraSen.visible
                             r.seteandoObj(son, xMiraSen.visible)
                             //console.log('Seteando '+son)
