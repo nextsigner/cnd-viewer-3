@@ -17,7 +17,7 @@ Rectangle {
     property var arrColors: ['green', '#ff8833', 'red', '#124cb1']
     Row{
         id: rowCuerpos
-        spacing: app.fs*0.1
+        spacing: app.fs*0.6
         anchors.centerIn: r
         Repeater{
             model: 2
@@ -39,6 +39,13 @@ Rectangle {
             }
         }
     }
+    Image {
+        id: iconAsp
+        width: app.fs*0.75
+        height: width
+        source: "./resources/imgs/"+r.tipo+".svg"
+        anchors.centerIn: r
+    }
     Component.onCompleted: {
         if(asp==='Trine'){
             r.tipo=0
@@ -54,20 +61,3 @@ Rectangle {
         }
     }
 }
-/*
-Debug: Asp: Trine Venus-Neptune c1:venus c2:neptune (file:///home/ns/nsp/uda/cnd-viewer-3/main.qml:386, load)
-
-Debug: Asp: Conjunction Mars-Jupiter c1:mars c2:jupiter (file:///home/ns/nsp/uda/cnd-viewer-3/main.qml:386, load)
-
-Debug: Asp: Quadrature Mars-Saturn c1:mars c2:saturn (file:///home/ns/nsp/uda/cnd-viewer-3/main.qml:386, load)
-
-Debug: Asp: Quadrature Jupiter-Saturn c1:jupiter c2:saturn (file:///home/ns/nsp/uda/cnd-viewer-3/main.qml:386, load)
-Debug: Asp: Trine Saturn-Lilith c1:saturn c2:lilith (file:///home/ns/nsp/uda/cnd-viewer-3/main.qml:386, load)
-
-Debug: Asp: Opposition Uranus-Hiron c1:uranus c2:hiron (file:///home/ns/nsp/uda/cnd-viewer-3/main.qml:386, load)
-
-Debug: Asp: Conjunction Uranus-Proserpina c1:uranus c2:proserpina (file:///home/ns/nsp/uda/cnd-viewer-3/main.qml:386, load)
-
-Debug: Asp: Opposition Hiron-Proserpina c1:hiron c2:proserpina (file:///home/ns/nsp/uda/cnd-viewer-3/main.qml:386, load)
-
-*/
