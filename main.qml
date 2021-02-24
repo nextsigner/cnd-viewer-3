@@ -32,35 +32,7 @@ ApplicationWindow {
         onCountChanged: {
             //console.log(get(count-1, 'fileName'))
             app.url='/home/ns/temp-screenshots/'+get(count-1, 'fileName')
-            console.log('Count app.url='+app.url)
-            tReload.start()
-            //img.source=app.url
-            //img2.source=app.url
-            let fn=app.url.replace('cap_', '').replace('.png', '')
-            let jsonFileName=fn+'.json'//'/home/ns/temp-screenshots/'+ms+'.json'
-            console.log('FileName: '+jsonFileName)
-            let jsonFileData=unik.getFile(jsonFileName)
-            //console.log(jsonFileData)
-            let jsonData=JSON.parse(jsonFileData)
-            let nom=jsonData.params.n.replace(/_/g, ' ')
-            let vd=jsonData.params.d
-            let vm=jsonData.params.m
-            let va=jsonData.params.a
-            let vh=jsonData.params.h
-            let vmin=jsonData.params.min
-            let vgmt=jsonData.params.gmt
-            let vlon=jsonData.params.lon
-            let vlat=jsonData.params.lat
-            let vCiudad=jsonData.params.ciudad.replace(/_/g, ' ')
-            let edad=' <b>Edad:</b> '+getEdad(""+va+"/"+vm+"/"+vd+" "+vh+":"+vmin+":00")
-            let stringEdad=edad.indexOf('NaN')<0?edad:''
-            let textData=''
-                +'<b>'+nom+'</b>'
-                +'<p style="font-size:20px;">'+vd+'/'+vm+'/'+va+' '+vh+':'+vmin+'hs GMT '+vgmt+stringEdad+'</p>'
-                +'<p style="font-size:20px;"><b> '+vCiudad+'</b></p>'
-                +'<p style="font-size:20px;"> <b>long:</b> '+vlon+' <b>lat:</b> '+vlat+'</p>'
-            xNombre.nom=textData
-            tLoadData.restart()
+            load(app.url)
         }
     }
     Timer{
@@ -69,8 +41,8 @@ ApplicationWindow {
         repeat: false
         interval: 2000
         onTriggered: {
-            xAreaInteractiva.loadData()
-            xAreaInteractivaZoom.loadData()
+            //xAreaInteractiva.loadData()
+            //xAreaInteractivaZoom.loadData()
         }
     }
     Timer{
@@ -396,6 +368,27 @@ ApplicationWindow {
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
         }
+        Rectangle{
+            id: xMsgProcDatos
+            width: txtPD.contentWidth+app.fs
+            height: app.fs*4
+            color: 'black'
+            border.width: 2
+            border.color: 'white'
+            visible: false
+            anchors.centerIn: parent
+            Text {
+                id: txtPD
+                text: 'Procesando datos...'
+                font.pixelSize: app.fs
+                color: 'white'
+                anchors.centerIn: parent
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: parent.visible=false
+            }
+        }
     }
     Shortcut{
         sequence: 'Ctrl+Up'
@@ -458,7 +451,7 @@ ApplicationWindow {
         //img2.source=app.url
         let fn=app.url.replace('cap_', '').replace('.png', '')
         let jsonFileName=fn+'.json'//'/home/ns/temp-screenshots/'+ms+'.json'
-        console.log('FileName: '+jsonFileName)
+        //console.log('FileName: '+jsonFileName)
         let jsonFileData=unik.getFile(jsonFileName)
         //console.log(jsonFileData)
         let jsonData=JSON.parse(jsonFileData)
@@ -480,6 +473,8 @@ ApplicationWindow {
             +'<p style="font-size:20px;"><b> '+vCiudad+'</b></p>'
             +'<p style="font-size:20px;"> <b>long:</b> '+vlon+' <b>lat:</b> '+vlat+'</p>'
         xNombre.nom=textData
-        tLoadData.restart()
+        xAreaInteractiva.loadData()
+        xAreaInteractivaZoom.loadData()
+        //tLoadData.restart()
     }
 }

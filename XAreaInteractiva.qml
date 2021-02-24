@@ -19,6 +19,26 @@ Rectangle {
         anchors.centerIn: r
         anchors.horizontalCenterOffset: app.fs*0.77
     }
+    Rectangle{
+        id: xMsgProcDatos
+        width: txtPD.contentWidth+app.fs
+        height: app.fs*4
+        color: 'black'
+        border.width: 2
+        border.color: 'white'
+        visible: false
+        Text {
+            id: txtPD
+            text: 'Procesando datos...'
+            font.pixelSize: app.fs
+            color: 'white'
+            anchors.centerIn: parent
+        }
+        MouseArea{
+            anchors.fill: parent
+            onClicked: parent.visible=false
+        }
+    }
     Component{
         id: sc
         Rectangle{
@@ -241,6 +261,24 @@ Rectangle {
         //console.log(jsonFileData)
         let jsonData=JSON.parse(jsonFileData)
         //let numSigno=app.objSignsNames.indexOf()
+
+        if(!jsonData.asp){
+            xMsgProcDatos.visible=true
+            let name=jsonData.params.n
+            let folderZodiacUser='/home/ns/zodiacserver/bin/user'
+            let fileDatLocation=folderZodiacUser+'/'+name+'.dat'
+            if(!unik.fileExist(fileDatLocation)){
+                name='\''+name.replace(/ /g,' ')+'.dat'+'\''
+                fileDatLocation=folderZodiacUser+'/'+name
+            }
+            //Argumentos fileName 1975 6 20 23 00 -3 -35.484462 -69.5797495 Malargue_Mendoza C:/nsp/uda/temp/data.json 15321321 10 "C:/nsp/uda/temp/capture.png" 1280x720 1280x720
+            let cmd='wine /home/ns/zodiacserver/bin/zodiac_server.exe '+(''+jsonData.params.n).replace(/ /g, '_')+' '+jsonData.params.a+' '+jsonData.params.m+' '+jsonData.params.d+' '+jsonData.params.h+' '+jsonData.params.m+' '+jsonData.params.gmt+' '+jsonData.params.lat+' '+jsonData.params.lon+' '+(''+jsonData.params.ciudad).replace(/ /g, '_')+' /home/ns/temp-screenshots/'+jsonData.params.ms+'.json '+jsonData.params.ms+' 3  /home/ns/temp-screenshots/cap_'+jsonData.params.ms+'.png  2560x1440 2560x1440'
+            console.log('CMD: '+cmd)
+            unik.ejecutarLineaDeComandoAparte(cmd)
+            return
+        }else{
+            xMsgProcDatos.visible=false
+        }
 
         let sObj=''
         let obj
