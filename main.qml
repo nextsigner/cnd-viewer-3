@@ -16,6 +16,8 @@ ApplicationWindow {
     property bool lock: false
     property string uSon: ''
 
+    property string uCuerpoAsp: ''
+
     property var signos: ['Aries', 'Tauro', 'Géminis', 'Cáncer', 'Leo', 'Virgo', 'Libra', 'Escorpio', 'Sagitario', 'Capricornio', 'Acuario', 'Piscis']
     property var planetas: ['Sol', 'Luna', 'Mercurio', 'Venus', 'Marte', 'Júpiter', 'Saturno', 'Urano', 'Neptuno', 'Plutón', 'Quirón', 'Proserpina', 'Selena', 'Lilith', 'N.Sur', 'N.Norte']
     property var planetasRes: ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'hiron', 'proserpina', 'selena', 'lilith', 's', 'n']
@@ -390,13 +392,27 @@ ApplicationWindow {
             function resaltar(c){
                 for(var i=0;i<xAsp.children.length;i++){
                     console.log('------------------------>'+c+': '+xAsp.children[i].c1)
-                    if(xAsp.children[i].c1===c||xAsp.children[i].c2===c){
+                    if(c===app.uCuerpoAsp){
                         xAsp.children[i].opacity=1.0
-                        //xAsp.height=app.fs*2
+                        xAsp.children[i].visible=true
+                        xAsp.columns=2
                     }else{
-                        xAsp.children[i].opacity=0.5
-                        //xAsp.height=app.fs*0.9
+                        xAsp.columns=1
+                        if(xAsp.children[i].c1===c||xAsp.children[i].c2===c){
+                            xAsp.children[i].opacity=1.0
+                            xAsp.children[i].visible=true
+                            //xAsp.height=app.fs*2
+                        }else{
+                            xAsp.children[i].opacity=0.5
+                            xAsp.children[i].visible=false
+                            //xAsp.height=app.fs*0.9
+                        }
                     }
+                }
+                if(c===app.uCuerpoAsp){
+                    app.uCuerpoAsp=''
+                }else{
+                    app.uCuerpoAsp=c
                 }
             }
         }
