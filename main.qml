@@ -460,11 +460,31 @@ ApplicationWindow {
     }
     Shortcut{
         sequence: 'Up'
-        onActivated: img.y-=4
+        onActivated: {
+            //img.y-=4
+            xAreaInteractiva.back()
+        }
     }
     Shortcut{
         sequence: 'Down'
-        onActivated: img.y+=4
+        onActivated: {
+            //img.y+=4
+            xAreaInteractiva.next()
+        }
+    }
+    Shortcut{
+        sequence: 'Left'
+        onActivated: {
+            //img.y+=4
+            xAreaInteractiva.acercarAlCentro()
+        }
+    }
+    Shortcut{
+        sequence: 'Right'
+        onActivated: {
+            //img.y+=4
+            xAreaInteractiva.acercarAlBorde()
+        }
     }
     Component.onCompleted: {
 

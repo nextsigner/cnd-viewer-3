@@ -8,6 +8,8 @@ Rectangle {
     border.width: 4
     border.color: 'pink'
     signal seteandoObj(string objName, bool set)
+    property int uCA: -1
+
     Rectangle {
         id: rueda
         width: app.fs*14
@@ -144,6 +146,26 @@ Rectangle {
                 visible: false
                 property bool enabled: true
             }
+            function activar(){
+                xAsp.resaltar(compSen.son.split('_')[0])
+                app.setInfo(compSen.info1, compSen.info2, compSen.info3,compSen.son)
+            }
+            function acercarAlCentro(){
+                if(!xMASC.seted){
+                    xMASC.height=app.fs*0.85//xMASC.parent.height/2-mouseY
+                    xMASC.width=xMASC.height
+                    xMASC.seted=true
+                }
+                xMASC.y+=1
+            }
+            function acercarAlBorde(){
+                if(!xMASC.seted){
+                    xMASC.height=app.fs*0.85//xMASC.parent.height/2-mouseY
+                    xMASC.width=xMASC.height
+                    xMASC.seted=true
+                }
+                xMASC.y-=1
+            }
         }
     }
     Component{
@@ -253,6 +275,28 @@ Rectangle {
                 property bool enabled: true
             }
         }
+    }
+    function next(){
+        if(r.uCA<15){
+            r.uCA++
+        }else{
+            r.uCA=0
+        }
+        rueda.children[r.uCA].activar()
+    }
+    function back(){
+        if(r.uCA>0){
+            r.uCA--
+        }else{
+            r.uCA=15
+        }
+        rueda.children[r.uCA].activar()
+    }
+    function acercarAlCentro(){
+        rueda.children[r.uCA].acercarAlCentro()
+    }
+    function acercarAlBorde(){
+        rueda.children[r.uCA].acercarAlBorde()
     }
     function loadData(){
         let fn=app.url.replace('cap_', '').replace('.png', '')
