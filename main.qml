@@ -8,7 +8,7 @@ ApplicationWindow {
     visible: true
     visibility: "Maximized"
     color: 'black'
-    title: 'cndviewer-2'
+    title: 'cndviewer-3'
     property int fs: width*0.03
     property string url
     property int mod: 0
@@ -138,7 +138,7 @@ ApplicationWindow {
                     }
                 }
             }
-            FastBlur {
+            /*FastBlur {
                 id: fb
                 anchors.fill: img
                 source: img
@@ -149,7 +149,7 @@ ApplicationWindow {
                 source: fb
                 brightness: 0.35
                 contrast: 0.7
-            }
+            }*/
             XAreaInteractiva{
                 id: xAreaInteractiva
                 anchors.fill: img
@@ -307,7 +307,7 @@ ApplicationWindow {
                 Behavior on y{
                     NumberAnimation{duration:750;easing.type: Easing.InOutCubic}
                 }
-                FastBlur {
+                /*FastBlur {
                     id: fb2
                     anchors.fill: img2
                     source: img2
@@ -318,7 +318,7 @@ ApplicationWindow {
                     source: fb2
                     brightness: 0.35
                     contrast: 0.7
-                }
+                }*/
 
 
                 MouseArea{
