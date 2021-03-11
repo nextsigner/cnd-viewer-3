@@ -299,6 +299,7 @@ Rectangle {
         rueda.children[r.uCA].acercarAlBorde()
     }
     function loadData(){
+        clearRueda()
         let fn=app.url.replace('cap_', '').replace('.png', '')
         let jsonFileName=fn+'.json'//'/home/ns/temp-screenshots/'+ms+'.json'
         console.log('FileName SC: '+jsonFileName)
@@ -397,6 +398,11 @@ Rectangle {
         //        sObj='Ascendente'
         //        obj=jsonData.psc[sObj]
         //        addSC(sObj, 'Ascendente', jsonData.pc.h1.g, jsonData.pc.h1.m, ('i').toUpperCase(), jsonData)
+    }
+    function clearRueda(){
+        for(var i=0;i<rueda.children.length;i++){
+            rueda.children[i].destroy(1)
+        }
     }
     function addSC(c, s, g, m, h, j){
         let numSigno=app.objSignsNames.indexOf(j.pc.h1.s)
