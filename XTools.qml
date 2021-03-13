@@ -25,6 +25,14 @@ Rectangle {
                 app.showIWFILES()
             }
         }
+        Button{
+            visible: app.uSon.indexOf('asc_')===0
+            text: 'Sabianos'
+            anchors.horizontalCenter: parent.horizontalCenter
+            onClicked: {
+                app.showSABIANOS(app.objSignsNames.indexOf(app.uSon.split('_')[1]), app.uAscDegree-1)
+            }
+        }
     }
     /*XCamera{
         id: xCamera

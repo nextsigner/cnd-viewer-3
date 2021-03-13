@@ -501,6 +501,7 @@ Rectangle {
         let obj=comp.createObject(rueda, {rotation: gTotSig, info1:info1,  info2:info2, info3:info3, son: ''+c+'_'+s+'_'+h})
     }
     function addSCAsc(c, s, g, m, j){
+        app.uAscDegree=g
         let fs=parseInt(app.fs*1.5)
         let fs2=parseInt(fs *0.4)
         let info1='<b  style="font-size:'+parseInt(fs*0.8)+'px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Signo</b><br />'

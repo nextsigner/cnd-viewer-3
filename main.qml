@@ -23,6 +23,7 @@ ApplicationWindow {
     property var planetas: ['Sol', 'Luna', 'Mercurio', 'Venus', 'Marte', 'Júpiter', 'Saturno', 'Urano', 'Neptuno', 'Plutón', 'Quirón', 'Proserpina', 'Selena', 'Lilith', 'N.Sur', 'N.Norte']
     property var planetasRes: ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'hiron', 'proserpina', 'selena', 'lilith', 's', 'n']
     property var objSignsNames: ['ari', 'tau', 'gem', 'cnc', 'leo', 'vir', 'lib', 'sco', 'sgr', 'cap', 'aqr', 'psc']
+    property int uAscDegree: -1
     Settings{
         id: apps
         property string url: ''
@@ -450,10 +451,24 @@ ApplicationWindow {
                 onClicked: parent.visible=false
             }
         }
+        XSabianos{id: xSabianos}
+    }
+    Shortcut{
+        sequence: 'Ctrl+Down'
+        onActivated: {
+            if(xSabianos.visible){
+                xSabianos.ctrlDown()
+                return
+            }
+        }
     }
     Shortcut{
         sequence: 'Ctrl+Up'
         onActivated: {
+            if(xSabianos.visible){
+                xSabianos.ctrlUp()
+                return
+            }
             if(app.mod===0){
                 app.mod=1
             }else{
@@ -469,33 +484,51 @@ ApplicationWindow {
     }
     Shortcut{
         sequence: 'Esc'
-        onActivated: Qt.quit()
+        onActivated: {
+            if(xSabianos.visible){
+                xSabianos.visible=false
+                return
+            }
+            Qt.quit()
+        }
     }
     Shortcut{
         sequence: 'Up'
         onActivated: {
-            //img.y-=4
+            if(xSabianos.visible){
+                xSabianos.up()
+                return
+            }
             xAreaInteractiva.back()
         }
     }
     Shortcut{
         sequence: 'Down'
         onActivated: {
-            //img.y+=4
+            if(xSabianos.visible){
+                xSabianos.down()
+                return
+            }
             xAreaInteractiva.next()
         }
     }
     Shortcut{
         sequence: 'Left'
         onActivated: {
-            //img.y+=4
+            if(xSabianos.visible){
+                xSabianos.left()
+                return
+            }
             xAreaInteractiva.acercarAlCentro()
         }
     }
     Shortcut{
         sequence: 'Right'
         onActivated: {
-            //img.y+=4
+            if(xSabianos.visible){
+                xSabianos.right()
+                return
+            }
             xAreaInteractiva.acercarAlBorde()
         }
     }
@@ -504,6 +537,13 @@ ApplicationWindow {
         onActivated: {
             //img.y+=4
             showIWFILES()
+        }
+    }
+    Shortcut{
+        sequence: 'Ctrl+s'
+        onActivated: {
+            //img.y+=4
+            showSABIANOS()
         }
     }
     Component.onCompleted: {
@@ -537,6 +577,17 @@ ApplicationWindow {
         let fileLocation='./iwfiles/main.qml'
         let comp=Qt.createComponent(fileLocation)
         let obj=comp.createObject(app, {comp: app, width: app.fs*14, fs: app.fs*0.5, title:'Cargar Archivos'})
+    }
+    function showSABIANOS(numSign, numDegree){
+        xSabianos.numSign=numSign
+        xSabianos.numDegree=numDegree
+        xSabianos.visible=true
+        xSabianos.loadData()
+        /*console.log('uSon: '+app.uSon)
+        let m0=app.uSon.split('_')
+        let fileLocation='./sabianos/main.qml'
+        let comp=Qt.createComponent(fileLocation)
+        let obj=comp.createObject(app, {comp: app, width: app.fs*14, fs: app.fs*0.5, htmlFolder: './sabianos/', numSign: numSign, numDegree:numDegree})*/
     }
     function getJSON(fileLocation, comp, s, c, nomCuerpo) {
         var request = new XMLHttpRequest()
