@@ -7,9 +7,10 @@ ApplicationWindow {
     visible: true
     width: app.fs*10
     height: app.fs*10
-    x: (Screen.width-app.width)/2
+    x: (Screen.width-app.width)/2+xOffSet
     y: (Screen.height-app.height)/2
     color: 'black'
+    property int xOffSet: 0
     property int fs: Screen.width*0.02
     property string textData: '?'
     Item{

@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 
 Rectangle {
     id: r
@@ -70,11 +71,40 @@ Rectangle {
                     border.width=1
                     tHideBorder.restart()
                 }
+                /*Rectangle{
+                    id: bug
+                    width: parent.width
+                    height: width
+                    color: 'red'
+                    anchors.centerIn: parent
+                    visible: false
+                }
+                Rectangle{
+                    id: mask
+                    width: 5
+                    height: width
+                    color: 'blue'
+                    anchors.centerIn: parent
+                    visible: false
+                }*/
+                Rectangle{
+                    id: centroMira
+                    width: 6
+                    height: width
+                    radius: width*0.5
+                    antialiasing: true
+                    color: parent.border.color
+                    anchors.centerIn: parent
+                    visible: parent.border.width>0
+                    rotation: 360-parent.parent.rotation
+
+                }
+
                 Timer{
                     id: tHideBorder
                     running: false
                     repeat: false
-                    interval: 100
+                    interval: 3000
                     onTriggered: parent.border.width=0
                 }
 
@@ -137,7 +167,56 @@ Rectangle {
                         }
                     }
                 }
+                Rectangle{
+                    width: 2
+                    height: 8000
+                    color: parent.border.color
+                    opacity: parent.border.width!==0?1.0:0.0
+                    onOpacityChanged: {
+                        x=parent.width*0.5-width*0.5
+                        y=parent.height*0.5-2
+                        //rotation=360-parent.parent.rotation
+                    }
+                    Behavior on opacity{
+                        NumberAnimation{duration: 250}
+                    }
+                    Item{
+                        id: xAxis
+                        width: 4
+                        height: 100
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.top
+                        rotation: 360-compSen.rotation
+                        //opacity: parent.border.width!==0?1.0:0.0
+                        Row{
+                            spacing: xMASC.height
+                            anchors.centerIn: parent
+                            Repeater{
+                                model: 2
+                                Rectangle{
+                                    width: 8000
+                                    height: 4
+                                    color: 'yellow'
+                                }
+                            }
+                        }
+                        Row{
+                            rotation: 90
+                            spacing: xMASC.height
+                            anchors.centerIn: parent
+                            Repeater{
+                                model: 2
+                                Rectangle{
+                                    width: 8000
+                                    height: 4
+                                    color: 'yellow'
+                                }
+                            }
+                        }
+                    }
+                }
             }
+
             XMira{
                 id: xMiraSen
                 w:app.fs*1.5
