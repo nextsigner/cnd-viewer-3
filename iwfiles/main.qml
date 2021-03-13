@@ -23,7 +23,7 @@ ApplicationWindow {
         sortReversed: true
         sortField: FolderListModel.Time
         onCountChanged: {
-            updateList()            
+            updateList()
         }
     }
     Item{
@@ -36,7 +36,7 @@ ApplicationWindow {
                 height: app.fs*1.5
                 color: 'black'
                 border.width: 2
-                border.color: 'white'
+                border.color: txtDataSearch.focus?'red':'white'
                 TextInput {
                     id: txtDataSearch
                     text: 'Archivos'
@@ -44,6 +44,7 @@ ApplicationWindow {
                     width: parent.width-app.fs
                     wrapMode: Text.WordWrap
                     color: 'white'
+                    focus: true
                     //anchors.verticalCenter: parent.verticalCenter
                     //anchors.left: parent.left
                     //anchors.leftMargin: app.fs
@@ -163,6 +164,10 @@ ApplicationWindow {
     Component.onCompleted: {
         //lm.append(lm.addItem('filename','dato 111 32135351315'))
         updateList()
+        raise();
+        forceActiveFocus();
+        requestActivate();
+        txtDataSearch.selectAll()
     }
     function deleteVnData(fileName){
         unik.deleteFile(fileName)

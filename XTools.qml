@@ -17,7 +17,7 @@ Rectangle {
             onClicked: {
                 console.log('uSon: '+app.uSon)
                 let m0=app.uSon.split('_')
-                let fileLocation='/home/ns/nsp/uda/cnd-viewer-3/iw/main.qml'
+                let fileLocation='./iw/main.qml'
                 let comp=Qt.createComponent(fileLocation)
 
                 //Cuerpo en Casa
@@ -41,12 +41,16 @@ Rectangle {
             onClicked: {
                 console.log('uSon: '+app.uSon)
                 let m0=app.uSon.split('_')
-                let fileLocation='/home/ns/nsp/uda/cnd-viewer-3/iwfiles/main.qml'
+                let fileLocation='./iwfiles/main.qml'
                 let comp=Qt.createComponent(fileLocation)
                 let obj=comp.createObject(app, {comp: app, width: app.fs*14, fs: app.fs*0.5, title:'Cargar Archivos'})
             }
         }
     }
+    /*XCamera{
+        id: xCamera
+        anchors.centerIn: r
+    }*/
     function getJSON(fileLocation, comp, s, c, nomCuerpo) {
         var request = new XMLHttpRequest()
 

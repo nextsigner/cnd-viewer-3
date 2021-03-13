@@ -56,5 +56,8 @@ ApplicationWindow {
     Component.onCompleted: {
         //let txt='Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo Este es un texto de ejemplo '
         data.text=app.textData
+        raise();
+        forceActiveFocus();
+        requestActivate();
     }
 }

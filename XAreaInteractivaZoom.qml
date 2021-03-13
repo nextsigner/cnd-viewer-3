@@ -202,7 +202,7 @@ Rectangle {
         }
     }
     function loadData(){
-        let fn=app.url.replace('cap_', '').replace('.png', '')
+        let fn=apps.url.replace('cap_', '').replace('.png', '')
         let jsonFileName=fn+'.json'//'/home/ns/temp-screenshots/'+ms+'.json'
         console.log('FileName SC: '+jsonFileName)
         let jsonFileData=unik.getFile(jsonFileName)
