@@ -92,7 +92,7 @@ Rectangle {
                                 data+='<p>'+dataJson0[i]+'</p>'
                             }
                         }
-                        let obj=comp.createObject(app, {textData:data, width: app.fs*14, fs: app.fs*0.5, title: nomCuerpo+' en '+app.signos[s]+' en casa '+c})
+                        let obj=comp.createObject(app, {textData:data, width: app.fs*14, fs: app.fs*0.5, title: nomCuerpo+' en '+app.signos[s - 1]+' en casa '+c})
                     }
                     //console.log('Data-->'+JSON.stringify(result))
                 } else {
