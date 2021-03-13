@@ -300,7 +300,7 @@ Rectangle {
     }
     function loadData(){
         clearRueda()
-        let fn=app.url.replace('cap_', '').replace('.png', '')
+        let fn=apps.url.replace('cap_', '').replace('.png', '')
         let jsonFileName=fn+'.json'//'/home/ns/temp-screenshots/'+ms+'.json'
         console.log('FileName SC: '+jsonFileName)
         let jsonFileData=unik.getFile(jsonFileName)
@@ -434,5 +434,11 @@ Rectangle {
     function getSigIndex(s){
         let ms=['ari', 'tau', 'gem', 'cnc', 'leo', 'vir', 'lib', 'sco', 'sgr', 'cap', 'aqr', 'psc']
         return ms.indexOf(s)
+    }
+    function getAbsPos(grado){
+        let _rads= grado * Math.PI/180
+        let xOffset= Math.cos(_rads)
+        let yOffset= Math.sin(_rads)
+        return {x: xOffset, y: yOffset}
     }
 }

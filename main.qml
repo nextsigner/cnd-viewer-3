@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtGraphicalEffects 1.12
 import QtQuick.Controls 2.0
 import Qt.labs.folderlistmodel 2.12
+import Qt.labs.settings 1.1
 
 ApplicationWindow {
     id: app
@@ -22,7 +23,10 @@ ApplicationWindow {
     property var planetas: ['Sol', 'Luna', 'Mercurio', 'Venus', 'Marte', 'Júpiter', 'Saturno', 'Urano', 'Neptuno', 'Plutón', 'Quirón', 'Proserpina', 'Selena', 'Lilith', 'N.Sur', 'N.Norte']
     property var planetasRes: ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'hiron', 'proserpina', 'selena', 'lilith', 's', 'n']
     property var objSignsNames: ['ari', 'tau', 'gem', 'cnc', 'leo', 'vir', 'lib', 'sco', 'sgr', 'cap', 'aqr', 'psc']
-
+    Settings{
+        id: apps
+        property string url: ''
+    }
     FolderListModel{
         folder: 'file:///home/ns/temp-screenshots'
         showDirs: false
@@ -33,8 +37,8 @@ ApplicationWindow {
         sortField: FolderListModel.Time
         onCountChanged: {
             //console.log(get(count-1, 'fileName'))
-            app.url='/home/ns/temp-screenshots/'+get(count-1, 'fileName')
-            load(app.url)
+            //app.url='/home/ns/temp-screenshots/'+get(count-1, 'fileName')
+            //load(app.url)
         }
     }
     Timer{
@@ -54,8 +58,8 @@ ApplicationWindow {
         interval: 1000
         onTriggered: {
             let d=new Date(Date.now())
-            img.source=app.url+'?r='+d.getTime()
-            img2.source=app.url+'?r='+d.getTime()
+            img.source=apps.url+'?r='+d.getTime()
+            img2.source=apps.url+'?r='+d.getTime()
         }
     }
     Timer{
@@ -65,8 +69,8 @@ ApplicationWindow {
         interval: 3000
         onTriggered: {
             let d=new Date(Date.now())
-            img.source=app.url+'?r='+d.getTime()
-            img2.source=app.url+'?r='+d.getTime()
+            img.source=apps.url+'?r='+d.getTime()
+            img2.source=apps.url+'?r='+d.getTime()
         }
     }
 
@@ -77,16 +81,17 @@ ApplicationWindow {
             id: xImg
             width: parent.width
             height: parent.height
-            border.width: 8
+            //border.width: 8
             border.color: app.mod===0?'red':'yellow'
             color: 'black'
             Image{
                 id: img
-                source: app.url
+                source: apps.url
                 width: xApp.width
                 fillMode: Image.PreserveAspectFit
                 anchors.centerIn: parent
                 anchors.horizontalCenterOffset: xApp.width*0.25
+                visible: false
                 property bool mov: false
                 onStatusChanged: {
                     //Image.Error
@@ -122,34 +127,37 @@ ApplicationWindow {
                 Behavior on y{
                     NumberAnimation{duration:750;easing.type: Easing.InOutCubic}
                 }
-                MouseArea{
-                    anchors.fill: parent
-                    drag.target: parent
-                    drag.axis: Drag.XAndYAxis
-                    acceptedButtons: Qt.LeftButton | Qt.RightButton
-                    onClicked: {
-                        info.text=mouseX
-                        img2.x=0-mouseX*2+img2.parent.width*0.5
-                        img2.y=0-mouseY*2+img2.parent.height*0.5
 
-                        //xMiraDer.x=mouseX+img.anchors.horizontalCenterOffset-xMiraDer.width*0.5
-                        //xMiraDer.y=mouseY-xMiraDer.height*0.5+img.y//app.fs*2
+            }
+            MouseArea{
+                anchors.fill: img
+                //drag.target: parent
+                //drag.axis: Drag.XAndYAxis
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: {
+                    info.text=mouseX
+                    img2.x=0-mouseX*2+img2.parent.width*0.5
+                    img2.y=0-mouseY*2+img2.parent.height*0.5
 
-                    }
+                    //xMiraDer.x=mouseX+img.anchors.horizontalCenterOffset-xMiraDer.width*0.5
+                    //xMiraDer.y=mouseY-xMiraDer.height*0.5+img.y//app.fs*2
+
                 }
             }
-            /*FastBlur {
+            FastBlur {
                 id: fb
                 anchors.fill: img
                 source: img
                 radius: 2
+                visible: false
             }
             BrightnessContrast {
+                id: bc
                 anchors.fill: fb
                 source: fb
                 brightness: 0.35
                 contrast: 0.7
-            }*/
+            }
             XAreaInteractiva{
                 id: xAreaInteractiva
                 anchors.fill: img
@@ -287,11 +295,10 @@ ApplicationWindow {
             clip: true
             Image{
                 id: img2
-                //visible: false
                 source: img.source
                 width: img.width*2
                 height: img.height*2
-                //fillMode: Image.PreserveAspectFit
+                visible: false
                 property bool mov: false
                 onXChanged:{
                     mov=true
@@ -307,35 +314,35 @@ ApplicationWindow {
                 Behavior on y{
                     NumberAnimation{duration:750;easing.type: Easing.InOutCubic}
                 }
-                /*FastBlur {
-                    id: fb2
-                    anchors.fill: img2
-                    source: img2
-                    radius: 2
-                }
-                BrightnessContrast {
-                    anchors.fill: fb2
-                    source: fb2
-                    brightness: 0.35
-                    contrast: 0.7
-                }*/
 
-
-                MouseArea{
-                    anchors.fill: parent
-                    drag.target: parent
-                    drag.axis: Drag.XAndYAxis
-                    acceptedButtons: Qt.LeftButton | Qt.RightButton
-                    onClicked: {
-                        info.text=mouseX
-                        /*if(mouse.modifiers) {
-                            xMira.enabled=!xMira.enabled
-                        }else{
-                            img.x=0-mouseX+img.width*0.5
-                            img.y=0-mouseY+img.height*0.5-40//(720-534)
-                        }*/
-                    }
+            }
+            MouseArea{
+                anchors.fill: img2
+                //drag.target: parent
+                //drag.axis: Drag.XAndYAxis
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: {
+                    info.text=mouseX
+                    /*if(mouse.modifiers) {
+                        xMira.enabled=!xMira.enabled
+                    }else{
+                        img.x=0-mouseX+img.width*0.5
+                        img.y=0-mouseY+img.height*0.5-40//(720-534)
+                    }*/
                 }
+            }
+            FastBlur {
+                id: fb2
+                anchors.fill: img2
+                source: img2
+                radius: 2
+                visible: false
+            }
+            BrightnessContrast {
+                anchors.fill: fb2
+                source: fb2
+                brightness: 0.35
+                contrast: 0.7
             }
             Rectangle{
                 anchors.fill: parent
@@ -487,7 +494,9 @@ ApplicationWindow {
         }
     }
     Component.onCompleted: {
-
+        if(apps.url!==''){
+            load(apps.url)
+        }
     }
     function setInfo(i1, i2, i3, son){
         if(son){
@@ -512,12 +521,13 @@ ApplicationWindow {
     }
     function load(file){
         console.log('Salida: '+file)
-        app.url=file//'/home/ns/temp-screenshots/'+get(count-1, 'fileName')
-        console.log('Count app.url='+app.url)
+        //app.url=file//'/home/ns/temp-screenshots/'+get(count-1, 'fileName')
+        apps.url=file
+        console.log('Count apps.url='+apps.url)
         tReload.start()
         //img.source=app.url
         //img2.source=app.url
-        let fn=app.url.replace('cap_', '').replace('.png', '')
+        let fn=apps.url.replace('cap_', '').replace('.png', '')
         let jsonFileName=fn+'.json'//'/home/ns/temp-screenshots/'+ms+'.json'
         //console.log('FileName: '+jsonFileName)
         let jsonFileData=unik.getFile(jsonFileName)
