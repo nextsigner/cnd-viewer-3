@@ -60,6 +60,8 @@ ApplicationWindow {
             let d=new Date(Date.now())
             img.source=apps.url+'?r='+d.getTime()
             img2.source=apps.url+'?r='+d.getTime()
+            //img2.x=600//img2.parent.width*4
+            //img2.y=img2.parent.height*4
         }
     }
     Timer{
@@ -71,6 +73,9 @@ ApplicationWindow {
             let d=new Date(Date.now())
             img.source=apps.url+'?r='+d.getTime()
             img2.source=apps.url+'?r='+d.getTime()
+            img2.x=0-app.fs*10.5
+            img2.y=0-img2.parent.height*0.5-app.fs*2.25
+            xMira.visible=true
         }
     }
 
@@ -100,8 +105,8 @@ ApplicationWindow {
                     }
                     if(status===Image.Ready){
                         //Qt.quit()
-                        img2.x=0-600
-                        img2.y=0-img2.height*2+xMira.height
+                        //img2.x=0-600
+                        //img2.y=Screen.height*0.5+500//0-img2.height*2+xMira.height
                     }
                 }
                 onXChanged:{
@@ -358,6 +363,7 @@ ApplicationWindow {
             XMira{
                 id: xMira
                 w:app.fs*2.5
+                visible: false
                 anchors.fill: parent
                 mov: false//enabled?img.mov:true
                 property bool enabled: true
