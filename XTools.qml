@@ -38,12 +38,8 @@ Rectangle {
         Button{
             text: 'Archivos'
             anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: {
-                console.log('uSon: '+app.uSon)
-                let m0=app.uSon.split('_')
-                let fileLocation='./iwfiles/main.qml'
-                let comp=Qt.createComponent(fileLocation)
-                let obj=comp.createObject(app, {comp: app, width: app.fs*14, fs: app.fs*0.5, title:'Cargar Archivos'})
+            onClicked: {               
+                app.showIW()
             }
         }
     }

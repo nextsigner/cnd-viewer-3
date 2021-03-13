@@ -161,6 +161,15 @@ ApplicationWindow {
             }
         }
     }
+    Timer{
+        running: true
+        interval: 2000
+        onTriggered: {
+            raise();
+            forceActiveFocus();
+            requestActivate();
+        }
+    }
     Component.onCompleted: {
         //lm.append(lm.addItem('filename','dato 111 32135351315'))
         updateList()
