@@ -22,16 +22,16 @@ Rectangle {
     Row{
         id: rowTit
         spacing: r.fs*0.25
+        anchors.horizontalCenter: parent.horizontalCenter
+        Text {
+            id: currentSign
+            text: '<b>Simbología de los Sabianos</b> - <b>'+r.signos[r.numSign]+'</b>'
+            font.pixelSize: r.fs*2
+            anchors.verticalCenter: parent.verticalCenter
+        }
         XSigno{
             id: xSigno
             numSign: r.numSign
-            anchors.verticalCenter: parent.verticalCenter
-        }
-        Text {
-            id: currentSign
-            text: '<b>'+r.signos[r.numSign]+'</b>'//+' ci:'+r.currentInterpreter+' ad:'+r.numDegree+' cs:'+r.numSign
-            font.pixelSize: r.fs*2
-            //color: 'white'
             anchors.verticalCenter: parent.verticalCenter
         }
     }
@@ -61,24 +61,7 @@ Rectangle {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        let gz=getJsonZoom(r.numSign, r.numDegree, r.currentInterpreter)
-                        console.log('gz sube:'+gz)
-                        let zoom=parseFloat(gz).toFixed(1)
-                        console.log('Z1:'+zoom)
-                        if(zoom==='NaN'){
-                            console.log('NaN! :'+zoom)
-                            return
-                        }
-                        r.fz+=0.1
-                        zoom=parseFloat(r.fz).toFixed(1)
-                        //unik.speak('Baja '+zoom)
-                        /*if(zoom<1.0){
-                                zoom=parseFloat(1).toFixed(1)
-                            }*/
-                        data.font.pixelSize=r.fs*2*r.fz
-                        console.log('SETZOOM:'+zoom)
-                        setJsonZoom(r.numSign, r.numDegree, r.currentInterpreter, zoom)
-                        r.loadData()
+                        zoomUp()
                     }
                 }
             }
@@ -89,26 +72,7 @@ Rectangle {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        let gz=getJsonZoom(r.numSign, r.numDegree, r.currentInterpreter)
-                        console.log('gz baja:'+gz)
-                        let zoom=parseFloat(gz).toFixed(1)
-                        console.log('Z1:'+zoom)
-                        if(zoom==='NaN'){
-                            console.log('NaN! :'+zoom)
-                            return
-                        }
-                        r.fz-=0.1
-                        if(r.fz<0.01){
-                            r.fz=0.01
-                        }
-                        zoom=parseFloat(r.fz).toFixed(1)
-                        //unik.speak('Sube '+zoom)
-
-
-                        data.font.pixelSize=r.fs*2*r.fz
-                        console.log('SETZOOM:'+zoom)
-                        setJsonZoom(r.numSign, r.numDegree, r.currentInterpreter, zoom)
-                        r.loadData()
+                        zoomDown()
                     }
                 }
             }
@@ -206,6 +170,9 @@ Rectangle {
         }
         //setJsonZoom(r.numSign, r.numDegree, r.currentInterpreter, zoom)
         r.fz=parseFloat(zoom).toFixed(1)
+        if(r.fz<0.5){
+            r.fz=0.5
+        }
         data.font.pixelSize=r.fs*2*r.fz
         let fileData=''+unik.getFile('./360.html')
         let dataSign=fileData.split('---')
@@ -334,7 +301,7 @@ Rectangle {
         }
         let arrayLines=jsonString.split('\n')
         let nomItem='pos_'+numSign+'_'+numDegree+'_'+numItem
-        let zoom="0.0"
+        let zoom="1.0"
         for(var i=0;i<arrayLines.length;i++){
             if(arrayLines[i].indexOf(nomItem)>=0){
                 zoom=""+arrayLines[i].split('=')[1]
@@ -343,4 +310,47 @@ Rectangle {
         }
         return zoom
     }
+    function zoomDown(){
+        let gz=getJsonZoom(r.numSign, r.numDegree, r.currentInterpreter)
+        console.log('gz baja:'+gz)
+        let zoom=parseFloat(gz).toFixed(1)
+        console.log('Z1:'+zoom)
+        if(zoom==='NaN'){
+            console.log('NaN! :'+zoom)
+            return
+        }
+        r.fz-=0.1
+        if(r.fz<0.01){
+            r.fz=0.01
+        }
+        zoom=parseFloat(r.fz).toFixed(1)
+        //unik.speak('Sube '+zoom)
+
+
+        data.font.pixelSize=r.fs*2*r.fz
+        console.log('SETZOOM:'+zoom)
+        setJsonZoom(r.numSign, r.numDegree, r.currentInterpreter, zoom)
+        r.loadData()
+    }
+    function zoomUp(){
+        let gz=getJsonZoom(r.numSign, r.numDegree, r.currentInterpreter)
+        console.log('gz sube:'+gz)
+        let zoom=parseFloat(gz).toFixed(1)
+        console.log('Z1:'+zoom)
+        if(zoom==='NaN'){
+            console.log('NaN! :'+zoom)
+            return
+        }
+        r.fz+=0.1
+        zoom=parseFloat(r.fz).toFixed(1)
+        //unik.speak('Baja '+zoom)
+        /*if(zoom<1.0){
+                zoom=parseFloat(1).toFixed(1)
+            }*/
+        data.font.pixelSize=r.fs*2*r.fz
+        console.log('SETZOOM:'+zoom)
+        setJsonZoom(r.numSign, r.numDegree, r.currentInterpreter, zoom)
+        r.loadData()
+    }
 }
+

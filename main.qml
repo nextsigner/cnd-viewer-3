@@ -547,6 +547,22 @@ ApplicationWindow {
             showSABIANOS()
         }
     }
+    Shortcut{
+        sequence: 'Ctrl+Shift+Down'
+        onActivated: {
+            if(xSabianos.visible){
+                xSabianos.zoomDown()
+            }
+        }
+    }
+    Shortcut{
+        sequence: 'Ctrl+Shift+Up'
+        onActivated: {
+            if(xSabianos.visible){
+                xSabianos.zoomUp()
+            }
+        }
+    }
     Component.onCompleted: {
         if(apps.url!==''){
             load(apps.url)

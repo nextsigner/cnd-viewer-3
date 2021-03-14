@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Item {
     id: r
-    width: app.fs*3
+    width: app.fs*2
     height: width
     property int numSign: -1
     Rectangle{
