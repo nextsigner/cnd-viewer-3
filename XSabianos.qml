@@ -7,6 +7,7 @@ Rectangle {
     visible: false
     color: 'white'
     anchors.fill: parent
+    property real fz: 1.0
     property string htmlFolder: ''
     property var signos: ['Aries', 'Tauro', 'Géminis', 'Cáncer', 'Leo', 'Virgo', 'Libra', 'Escorpio', 'Sagitario', 'Capricornio', 'Acuario', 'Piscis']
     property int numSign: 0
@@ -32,7 +33,7 @@ Rectangle {
             id: data
             text: '<h1>Los Sabianos</h1>'
             font.pixelSize: r.fs
-            width: xr.width-r.fs*2
+            width: xr.width-r.fs*2*r.fz
             wrapMode: Text.WordWrap
             //textFormat: Text.PlainText
             textFormat: Text.RichText
@@ -51,6 +52,73 @@ Rectangle {
                 font.pixelSize: r.fs*2
                 //color: 'white'
                 anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+        Rectangle{
+            id: xZoom
+            width: app.fs*4
+            height: r.height
+            anchors.right: parent.right
+            Column{
+                anchors.centerIn: parent
+                Rectangle{
+                    width: xZoom.width
+                    height: xZoom.height/2
+                    color: 'transparent'
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            let gz=getJsonZoom(r.numSign, r.numDegree, r.currentInterpreter)
+                            console.log('gz sube:'+gz)
+                            let zoom=parseFloat(gz).toFixed(1)
+                            console.log('Z1:'+zoom)
+                            if(zoom==='NaN'){
+                                console.log('NaN! :'+zoom)
+                                return
+                            }
+                            r.fz+=0.1
+                            zoom=parseFloat(r.fz).toFixed(1)
+                            //unik.speak('Baja '+zoom)
+                            /*if(zoom<1.0){
+                                zoom=parseFloat(1).toFixed(1)
+                            }*/
+                            data.font.pixelSize=r.fs*2*r.fz
+                            console.log('SETZOOM:'+zoom)
+                            setJsonZoom(r.numSign, r.numDegree, r.currentInterpreter, zoom)
+                            r.loadData()
+                        }
+                    }
+                }
+                Rectangle{
+                    width: xZoom.width
+                    height: xZoom.height/2
+                    color: 'transparent'
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            let gz=getJsonZoom(r.numSign, r.numDegree, r.currentInterpreter)
+                            console.log('gz baja:'+gz)
+                            let zoom=parseFloat(gz).toFixed(1)
+                            console.log('Z1:'+zoom)
+                            if(zoom==='NaN'){
+                                console.log('NaN! :'+zoom)
+                                return
+                            }
+                            r.fz-=0.1
+                            if(r.fz<0.01){
+                                r.fz=0.01
+                            }
+                            zoom=parseFloat(r.fz).toFixed(1)
+                            //unik.speak('Sube '+zoom)
+
+
+                            data.font.pixelSize=r.fs*2*r.fz
+                            console.log('SETZOOM:'+zoom)
+                            setJsonZoom(r.numSign, r.numDegree, r.currentInterpreter, zoom)
+                            r.loadData()
+                        }
+                    }
+                }
             }
         }
         Text {
@@ -137,40 +205,16 @@ Rectangle {
         }
         loadData()
     }
-    function makeHtml(string){
-        let m0=string.split(' ')
-        let html=''
-        let cantGrupos=1
-        for(var i=1;i<m0.length;i++){
-            let m1=m0[i].split('.')
-            let s=parseInt(m1[0])
-            let g=parseInt(m1[1])
-            let h=m1[2]
-
-            html+='<h2>Grupo '+parseInt(i)+'</h2>\n'
-            html+='<h4>Hora de Nacimiento: '+h+'hs</h4>\n'
-            html+=getHtmlData(s-1,g-1,0)
-            html+=getHtmlData(s-1,g-1,1)
-            html+=getHtmlData(s-1,g-1,2)
-            html+='\n'
-            cantGrupos++
-        }
-        setHtml(html, m0[0])
-        let d=new Date(Date.now())
-        let ms=d.getTime()
-        let url='https://nextsigner.github.io/sabianos/'+m0[0]+'.html?r='+ms
-        let sh='#!/bin/bash\n'
-        sh+='cd /home/ns/nsp/uda/nextsigner.github.io\n'
-        sh+='git add *\n'
-        sh+='git commit -m "se sube el html '+m0[0]+' '+ms+'"\n'
-        sh+='git push origin master\n'
-        sh+='echo "Html subido!"\n'
-        sh+='exit\n'
-        unik.setFile('/tmp/'+ms+'.sh', sh)
-        unik.ejecutarLineaDeComandoAparte('sh /tmp/'+ms+'.sh')
-        console.log('Url: '+url+' script=/tmp/'+ms+'.sh')
-    }
     function loadData(){
+        let gz=getJsonZoom(r.numSign, r.numDegree, r.currentInterpreter)
+        let zoom=parseFloat(gz).toFixed(1)
+        if(zoom<0.1){
+            zoom=0.1
+            setJsonZoom(r.numSign, r.numDegree, r.currentInterpreter, zoom)
+        }
+        //setJsonZoom(r.numSign, r.numDegree, r.currentInterpreter, zoom)
+        r.fz=parseFloat(zoom).toFixed(1)
+        data.font.pixelSize=r.fs*2*r.fz
         let fileData=''+unik.getFile('./360.html')
         let dataSign=fileData.split('---')
         let stringSplit=''
@@ -197,21 +241,14 @@ Rectangle {
         let mapHtmlDegree=htmlPrevio.split('<p ')
         let dataFinal='<p '+mapHtmlDegree[r.currentInterpreter + 1]
 
-        //if(rs.bgColor!=='#ffffff'){
-            /*if(dataFinal.indexOf('<p class="entry-excerpt" style="text-align: justify;"><strong><span style="color:')<0&&dataFinal.indexOf('<p class="entry-excerpt" style="text-align: justify;"><span>strong style="color:')<0){
-                dataFinal=dataFinal.replace('<p class="entry-excerpt" style="text-align: justify;"><strong>','<p class="entry-excerpt" style="text-align: justify;color:#ffffff"><strong>')
-                dataFinal=dataFinal.replace('<p class="entry-excerpt" style="text-align: justify;"><span ','<p class="entry-excerpt" style="text-align: justify;color:#ffffff"><span ')
-                dataFinal=dataFinal.replace('style="color: rgb(0, 0, 255);','style="color: rgb(255, 255, 255);')*/
-            //}else{
-                if(dataFinal.indexOf('<p class="entry-excerpt" style="text-align: justify;"><strong><span style="color: rgb(255, 0, 0);">'>=0)){
-                    dataFinal=dataFinal.replace('<p class="entry-excerpt" style="text-align: justify;"><strong>','<p class="entry-excerpt" style="text-align: justify;color:red"><strong>')
-                }else{
-                    dataFinal=dataFinal.replace('<p class="entry-excerpt" style="text-align: justify;"><strong>','<p class="entry-excerpt" style="text-align: justify;color:green"><strong>')
-                }
-            //}
-        //}
+
+        if(dataFinal.indexOf('<p class="entry-excerpt" style="text-align: justify;"><strong><span style="color: rgb(255, 0, 0);">'>=0)){
+            dataFinal=dataFinal.replace('<p class="entry-excerpt" style="text-align: justify;"><strong>','<p class="entry-excerpt" style="text-align: justify;color:red"><strong>')
+        }else{
+            dataFinal=dataFinal.replace('<p class="entry-excerpt" style="text-align: justify;"><strong>','<p class="entry-excerpt" style="text-align: justify;color:green"><strong>')
+        }
         data.text=dataFinal
-            console.log('DATA:::'+dataFinal)
+        //console.log('DATA:::'+dataFinal)
     }
     function getHtmlData(s, g, item){
         let fileData=''+unik.getFile('360.html')
@@ -274,5 +311,44 @@ Rectangle {
     </body>
 </html>'
         unik.setFile('/home/ns/nsp/uda/nextsigner.github.io/sabianos/'+nom+'.html', htmlFinal)
+    }
+    function setJsonZoom(numSign, numDegree, numItem, zoom){
+        let jsonFile='./sabianosJsonZoom.json'
+        let existe=unik.fileExist(jsonFile)
+        let jsonString=''
+        let newJsonString=''
+        if(existe){
+            jsonString=unik.getFile(jsonFile)
+        }
+        let arrayLines=jsonString.split('\n')
+        let nomItem='pos_'+numSign+'_'+numDegree+'_'+numItem
+        let e=false
+        for(var i=0;i<arrayLines.length;i++){
+            if(arrayLines[i].indexOf(nomItem)<0&&arrayLines[i].indexOf('pos_')>=0){
+                newJsonString+=arrayLines[i]+'\n'
+            }
+        }
+        //if(!e){
+        newJsonString+=nomItem+'='+zoom+'\n'
+        //}
+        unik.setFile(jsonFile, newJsonString)
+    }
+    function getJsonZoom(numSign, numDegree, numItem){
+        let jsonFile='./sabianosJsonZoom.json'
+        let existe=unik.fileExist(jsonFile)
+        let jsonString=''
+        if(existe){
+            jsonString=unik.getFile(jsonFile)
+        }
+        let arrayLines=jsonString.split('\n')
+        let nomItem='pos_'+numSign+'_'+numDegree+'_'+numItem
+        let zoom="0.0"
+        for(var i=0;i<arrayLines.length;i++){
+            if(arrayLines[i].indexOf(nomItem)>=0){
+                zoom=""+arrayLines[i].split('=')[1]
+                break
+            }
+        }
+        return zoom
     }
 }

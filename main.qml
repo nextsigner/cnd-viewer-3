@@ -24,6 +24,7 @@ ApplicationWindow {
     property var planetasRes: ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'hiron', 'proserpina', 'selena', 'lilith', 's', 'n']
     property var objSignsNames: ['ari', 'tau', 'gem', 'cnc', 'leo', 'vir', 'lib', 'sco', 'sgr', 'cap', 'aqr', 'psc']
     property int uAscDegree: -1
+    property string stringRes: "Res"+Screen.width+"x"+Screen.height
     Settings{
         id: apps
         property string url: ''
