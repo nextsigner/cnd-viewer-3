@@ -14,122 +14,114 @@ Rectangle {
     property int numDegree: 0
     property int fs: width*0.025
     property int currentInterpreter: 0
-    Item{
-        id: xr
+
+    MouseArea{
         anchors.fill: parent
-        focus: true
-        MouseArea{
-            anchors.fill: parent
-            onDoubleClicked: {
-                /*if(rs.bgColor==='#ffffff'){
-                    rs.bgColor='#000000'
-                }else{
-                    rs.bgColor='#ffffff'
-                }*/
-                loadData()
-            }
-        }
-        Text{
-            id: data
-            text: '<h1>Los Sabianos</h1>'
-            font.pixelSize: r.fs
-            width: xr.width-r.fs*2*r.fz
-            wrapMode: Text.WordWrap
-            //textFormat: Text.PlainText
-            textFormat: Text.RichText
-            anchors.centerIn: parent
-        }
-        Row{
-            spacing: r.fs*0.25
-            XSigno{
-                id: xSigno
-                numSign: r.numSign
-                anchors.verticalCenter: parent.verticalCenter
-            }
-            Text {
-                id: currentSign
-                text: '<b>'+r.signos[r.numSign]+'</b>'//+' ci:'+r.currentInterpreter+' ad:'+r.numDegree+' cs:'+r.numSign
-                font.pixelSize: r.fs*2
-                //color: 'white'
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-        Rectangle{
-            id: xZoom
-            width: app.fs*4
-            height: r.height
-            anchors.right: parent.right
-            Column{
-                anchors.centerIn: parent
-                Rectangle{
-                    width: xZoom.width
-                    height: xZoom.height/2
-                    color: 'transparent'
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-                            let gz=getJsonZoom(r.numSign, r.numDegree, r.currentInterpreter)
-                            console.log('gz sube:'+gz)
-                            let zoom=parseFloat(gz).toFixed(1)
-                            console.log('Z1:'+zoom)
-                            if(zoom==='NaN'){
-                                console.log('NaN! :'+zoom)
-                                return
-                            }
-                            r.fz+=0.1
-                            zoom=parseFloat(r.fz).toFixed(1)
-                            //unik.speak('Baja '+zoom)
-                            /*if(zoom<1.0){
-                                zoom=parseFloat(1).toFixed(1)
-                            }*/
-                            data.font.pixelSize=r.fs*2*r.fz
-                            console.log('SETZOOM:'+zoom)
-                            setJsonZoom(r.numSign, r.numDegree, r.currentInterpreter, zoom)
-                            r.loadData()
-                        }
-                    }
-                }
-                Rectangle{
-                    width: xZoom.width
-                    height: xZoom.height/2
-                    color: 'transparent'
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-                            let gz=getJsonZoom(r.numSign, r.numDegree, r.currentInterpreter)
-                            console.log('gz baja:'+gz)
-                            let zoom=parseFloat(gz).toFixed(1)
-                            console.log('Z1:'+zoom)
-                            if(zoom==='NaN'){
-                                console.log('NaN! :'+zoom)
-                                return
-                            }
-                            r.fz-=0.1
-                            if(r.fz<0.01){
-                                r.fz=0.01
-                            }
-                            zoom=parseFloat(r.fz).toFixed(1)
-                            //unik.speak('Sube '+zoom)
+    }
 
-
-                            data.font.pixelSize=r.fs*2*r.fz
-                            console.log('SETZOOM:'+zoom)
-                            setJsonZoom(r.numSign, r.numDegree, r.currentInterpreter, zoom)
-                            r.loadData()
-                        }
-                    }
-                }
-            }
+    Row{
+        id: rowTit
+        spacing: r.fs*0.25
+        XSigno{
+            id: xSigno
+            numSign: r.numSign
+            anchors.verticalCenter: parent.verticalCenter
         }
         Text {
-            id: currentDegree
-            property string sd: '?'
-            text: '<b>'+sd+'</b>'//+' ci:'+r.currentInterpreter+' ad:'+r.numDegree+' cs:'+r.numSign
+            id: currentSign
+            text: '<b>'+r.signos[r.numSign]+'</b>'//+' ci:'+r.currentInterpreter+' ad:'+r.numDegree+' cs:'+r.numSign
             font.pixelSize: r.fs*2
             //color: 'white'
-            anchors.bottom: parent.bottom
-            visible: false
+            anchors.verticalCenter: parent.verticalCenter
         }
+    }
+    Text{
+        id: data
+        width: r.width-app.fs*0.25
+        anchors.horizontalCenter: r.horizontalCenter
+        anchors.top: rowTit.bottom
+        anchors.topMargin: app.fs*0.5
+        text: '<h1>Los Sabianos</h1>'
+        font.pixelSize: r.fs
+        wrapMode: Text.WordWrap
+        textFormat: Text.RichText
+    }
+    Rectangle{
+        id: xZoom
+        width: app.fs*4
+        height: r.height
+        x:r.width-width
+        color: 'transparent'
+        Column{
+            anchors.centerIn: parent
+            Rectangle{
+                width: xZoom.width
+                height: xZoom.height/2
+                color: 'transparent'
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        let gz=getJsonZoom(r.numSign, r.numDegree, r.currentInterpreter)
+                        console.log('gz sube:'+gz)
+                        let zoom=parseFloat(gz).toFixed(1)
+                        console.log('Z1:'+zoom)
+                        if(zoom==='NaN'){
+                            console.log('NaN! :'+zoom)
+                            return
+                        }
+                        r.fz+=0.1
+                        zoom=parseFloat(r.fz).toFixed(1)
+                        //unik.speak('Baja '+zoom)
+                        /*if(zoom<1.0){
+                                zoom=parseFloat(1).toFixed(1)
+                            }*/
+                        data.font.pixelSize=r.fs*2*r.fz
+                        console.log('SETZOOM:'+zoom)
+                        setJsonZoom(r.numSign, r.numDegree, r.currentInterpreter, zoom)
+                        r.loadData()
+                    }
+                }
+            }
+            Rectangle{
+                width: xZoom.width
+                height: xZoom.height/2
+                color: 'transparent'
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        let gz=getJsonZoom(r.numSign, r.numDegree, r.currentInterpreter)
+                        console.log('gz baja:'+gz)
+                        let zoom=parseFloat(gz).toFixed(1)
+                        console.log('Z1:'+zoom)
+                        if(zoom==='NaN'){
+                            console.log('NaN! :'+zoom)
+                            return
+                        }
+                        r.fz-=0.1
+                        if(r.fz<0.01){
+                            r.fz=0.01
+                        }
+                        zoom=parseFloat(r.fz).toFixed(1)
+                        //unik.speak('Sube '+zoom)
+
+
+                        data.font.pixelSize=r.fs*2*r.fz
+                        console.log('SETZOOM:'+zoom)
+                        setJsonZoom(r.numSign, r.numDegree, r.currentInterpreter, zoom)
+                        r.loadData()
+                    }
+                }
+            }
+        }
+    }
+    Text {
+        id: currentDegree
+        property string sd: '?'
+        text: '<b>'+sd+'</b>'//+' ci:'+r.currentInterpreter+' ad:'+r.numDegree+' cs:'+r.numSign
+        font.pixelSize: r.fs*2
+        //color: 'white'
+        anchors.bottom: parent.bottom
+        visible: false
     }
     function ctrlDown(){
         if(r.numSign<11){
