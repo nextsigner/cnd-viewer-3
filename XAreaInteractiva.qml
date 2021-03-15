@@ -255,7 +255,7 @@ Rectangle {
             height: rueda.width
             anchors.centerIn: parent
             rotation: 45
-            color: 'transparent'
+            color: rotation===-90?'transparent':'red'
             property string son: '???'
             property string info1: '???'
             property string info2: '???'
@@ -473,6 +473,7 @@ Rectangle {
         addSC(sObj, obj.s, obj.g, obj.m, (obj.rh).toUpperCase(), jsonData)
 
         addSCAsc('asc', jsonData.pc.h1.s, jsonData.pc.h1.g, jsonData.pc.h1.m, jsonData)
+        addSCMc('mc', jsonData.pc.h10.s, jsonData.pc.h10.g, jsonData.pc.h10.m, jsonData)
 
         //        sObj='Ascendente'
         //        obj=jsonData.psc[sObj]
@@ -510,6 +511,19 @@ Rectangle {
         let info3='<b style="font-size:'+fs2+'px;">°'+g+'\''+m+' Casa I</b>'
         let comp=scAsc
         let obj=comp.createObject(rueda, {rotation: -90, info1:info1,  info2:info2, info3:info3, son: ''+c+'_'+s+'_I'})
+    }
+    function addSCMc(c, s, g, m, j){
+        app.uMcDegree=g
+        let fs=parseInt(app.fs*1.5)
+        let fs2=parseInt(fs *0.4)
+        let info1='<b  style="font-size:'+parseInt(fs*0.8)+'px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Signo</b><br />'
+        info1+='<b  style="font-size:'+parseInt(fs*1.1)+'px;">Medio Cielo</b>'
+        let info2='<b style="font-size:'+fs+'px;">'+app.signos[app.objSignsNames.indexOf(s)]+'</b>'
+        let info3='<b style="font-size:'+fs2+'px;">°'+g+'\''+m+' Casa X</b>'
+        let comp=scAsc
+        let indexSign=app.objSignsNames.indexOf(s)
+        let totalDegrees=30*indexSign+g
+        let obj=comp.createObject(rueda, {rotation: 0-totalDegrees, info1:info1,  info2:info2, info3:info3, son: ''+c+'_'+s+'_X'})
     }
     function getSigIndex(s){
         let ms=['ari', 'tau', 'gem', 'cnc', 'leo', 'vir', 'lib', 'sco', 'sgr', 'cap', 'aqr', 'psc']
