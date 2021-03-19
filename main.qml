@@ -407,22 +407,31 @@ ApplicationWindow {
             }
             function resaltar(c){
                 for(var i=0;i<xAsp.children.length;i++){
-                    console.log('------------------------>'+c+': '+xAsp.children[i].c1)
-                    if(c===app.uCuerpoAsp){
+                    xAsp.children[i].invertido=false
+                }
+                for(var i=0;i<xAsp.children.length;i++){
+                    console.log('resaltar('+c+'); '+xAsp.children[i].c1)
+                    let s1=xAsp.children[i].c1+'-'+xAsp.children[i].c2
+                    let s2=xAsp.children[i].c2+'-'+xAsp.children[i].c1
+                    if(s1.indexOf(app.uCuerpoAsp)>=0||s2.indexOf(app.uCuerpoAsp)>=0){
                         xAsp.children[i].opacity=1.0
                         xAsp.children[i].visible=true
+                        if(xAsp.children[i].c1!==c){
+                            xAsp.children[i].invertido=true
+                        }
                         xAsp.columns=2
                     }else{
                         xAsp.columns=1
-                        if(xAsp.children[i].c1===c||xAsp.children[i].c2===c){
-                            xAsp.children[i].opacity=1.0
-                            xAsp.children[i].visible=true
-                            //xAsp.height=app.fs*2
-                        }else{
+                        //if(xAsp.children[i].c1===c||xAsp.children[i].c2===c){
+//                        if(xAsp.children[i].c2===c){
+//                            xAsp.children[i].opacity=1.0
+//                            xAsp.children[i].visible=true
+//                            //xAsp.height=app.fs*2
+//                        }else{
                             xAsp.children[i].opacity=0.5
                             xAsp.children[i].visible=false
                             //xAsp.height=app.fs*0.9
-                        }
+                        //}
                     }
                 }
                 if(c===app.uCuerpoAsp){
