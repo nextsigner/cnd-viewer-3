@@ -26,11 +26,16 @@ Rectangle {
             }
         }
         Button{
-            visible: app.uSon.indexOf('asc_')===0
+            visible: app.uSon.indexOf('asc_')===0||app.uSon.indexOf('mc_')===0
             text: 'Sabianos'
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
-                app.showSABIANOS(app.objSignsNames.indexOf(app.uSon.split('_')[1]), app.uAscDegree-1)
+                if(app.uSon.indexOf('asc_')===0){
+                    app.showSABIANOS(app.objSignsNames.indexOf(app.uSon.split('_')[1]), app.uAscDegree-1)
+                }
+                if(app.uSon.indexOf('mc_')===0){
+                    app.showSABIANOS(app.objSignsNames.indexOf(app.uSon.split('_')[1]), app.uMcDegree-1)
+                }
             }
         }
     }

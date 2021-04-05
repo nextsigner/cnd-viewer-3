@@ -523,7 +523,9 @@ Rectangle {
         let comp=scAsc
         let indexSign=app.objSignsNames.indexOf(s)
         let totalDegrees=30*indexSign+g
-        let obj=comp.createObject(rueda, {rotation: 0-totalDegrees, info1:info1,  info2:info2, info3:info3, son: ''+c+'_'+s+'_X'})
+        let numSigno=app.objSignsNames.indexOf(j.pc.h1.s)
+        let gAsc=j.pc.h1.g+numSigno*30
+        let obj=comp.createObject(rueda, {rotation: -90+gAsc-totalDegrees, info1:info1,  info2:info2, info3:info3, son: ''+c+'_'+s+'_X'})
     }
     function getSigIndex(s){
         let ms=['ari', 'tau', 'gem', 'cnc', 'leo', 'vir', 'lib', 'sco', 'sgr', 'cap', 'aqr', 'psc']

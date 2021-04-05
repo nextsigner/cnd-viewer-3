@@ -380,7 +380,13 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
             visible: false
         }
-        XNombre{id: xNombre}
+        XNombre{
+            id: xNombre
+            XFormZS{
+                id: xFormZS
+                visible: false
+            }
+        }
         XTools{
             id: xTools
             anchors.bottom: parent.bottom
@@ -541,6 +547,12 @@ ApplicationWindow {
                 return
             }
             xAreaInteractiva.acercarAlBorde()
+        }
+    }
+    Shortcut{
+        sequence: 'Ctrl+n'
+        onActivated: {
+            xFormZS.visible=!xFormZS.visible
         }
     }
     Shortcut{
@@ -731,4 +743,5 @@ ApplicationWindow {
         xAsp.load(jsonData)
         //tLoadData.restart()
     }
+
 }
